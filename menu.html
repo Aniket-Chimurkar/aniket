@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        #menu{
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+            margin-bottom: 25px;
+        }
+
+#menu>div{
+    border: 2px solid black;
+    height: 500px;
+    width: 400px;
+    margin-bottom: 100px;
+    margin-left: 45px;
+    overflow: hidden;
+    
+}
+#nav{
+            border: 2px solid black;
+            height:50px;
+            display: flex;
+        }
+        #nav>div{
+            margin-left: 10px;
+            margin-top: 15px;
+        }
+        button{
+            border: transparent;
+            cursor: pointer;
+        }
+
+
+
+    </style>
+</head>
+<body>
+
+    <div id = "nav">
+        <div>login</div>
+        <div>signup</div>
+        <div>
+            <button onclick="red()">menu</button>
+        </div>
+        <div>
+            <button onclick="checkout()">checkout</button>
+        </div>
+        <div>
+            <button onclick="cart()">cart</button>
+        </div>
+    </div>
+   
+    <div id="menu"></div>
+</body>
+</html>
+
+<script>
+
+
+
+async function getproducts(){
+    
+let res = await fetch("https://www.themealdb.com/api/json/v1/1/categories.php")
+console.log(res)
+let response = await res.json()
+
+let list = response.categories
+console.log(response)
+foodmenu(list)
+
+}
+getproducts()
+
+
+function foodmenu(elem){
+
+elem.map(function(elem){
+
+
+let fooddiv = document.getElementById("menu")
+let newfood = document.createElement("div")
+
+let img = document.createElement("img")
+img.src = elem.strCategoryThumb
+
+let price = document.createElement("h3")
+price.textContent= Math.round(Math.random() *500) + "  $"
+ 
+let name= document.createElement("h4")
+name.textContent = elem.strCategory
+
+let cat = document.createElement("p")
+cat.textContent = elem.strCategoryDescription
+
+let id = document.createElement("h2")
+id.textContent = elem.idCategory
+
+let but = document.createElement("button")
+but.textContent="Add-To-Cart"
+
+
+
+
+
+
+
+newfood.append(img,price,name,but,cat)
+fooddiv.append(newfood)
+
+
+
+let arr = JSON.parse(localStorage.getItem("cartitems")) ||[]
+but.addEventListener("click",function(){
+// console.log("here")
+
+let obj ={
+img : elem.strCategoryThumb,
+name:elem.strCategory,
+price : elem.price
+
+}
+
+arr.push(obj)
+
+
+localStorage.setItem("cartitems",JSON.stringify(arr))
+
+
+})
+
+
+
+
+
+
+
+})
+
+
+}
+
+
+function checkout(){
+    window.location.href="checkout.html"
+}
+
+
+function cart(){
+    window.location.href="cart.html"
+}
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+</script>
